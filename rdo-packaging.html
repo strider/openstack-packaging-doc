@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="AsciiDoc 8.6.8">
+<title>RDO Openstack Packaging</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #777777;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+tt {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+.monospaced {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+/*
+ * Theme specific overrides of the preceding (asciidoc.css) CSS.
+ *
+ */
+body {
+  font-family: Garamond, Georgia, serif;
+  font-size: 17px;
+  color: #3E4349;
+  line-height: 1.3em;
+}
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Garmond, Georgia, serif;
+  font-weight: normal;
+  border-bottom-width: 0;
+  color: #3E4349;
+}
+div.title, caption.title { color: #596673; font-weight: bold; }
+h1 { font-size: 240%; }
+h2 { font-size: 180%; }
+h3 { font-size: 150%; }
+h4 { font-size: 130%; }
+h5 { font-size: 115%; }
+h6 { font-size: 100%; }
+#header h1 { margin-top: 0; }
+#toc {
+  color: #444444;
+  line-height: 1.5;
+  padding-top: 1.5em;
+}
+#toctitle {
+  font-size: 20px;
+}
+#toc a {
+    border-bottom: 1px dotted #999999;
+    color: #444444 !important;
+    text-decoration: none !important;
+}
+#toc a:hover {
+    border-bottom: 1px solid #6D4100;
+    color: #6D4100 !important;
+    text-decoration: none !important;
+}
+div.toclevel1 { margin-top: 0.2em; font-size: 16px; }
+div.toclevel2 { margin-top: 0.15em; font-size: 14px; }
+em, dt, td.hdlist1 { color: black; }
+strong { color: #3E4349; }
+a { color: #004B6B; text-decoration: none; border-bottom: 1px dotted #004B6B; }
+a:visited { color: #615FA0; border-bottom: 1px dotted #615FA0; }
+a:hover { color: #6D4100; border-bottom: 1px solid #6D4100; }
+div.tableblock > table, table.tableblock { border: 3px solid #E8E8E8; }
+th.tableblock, td.tableblock { border: 1px solid #E8E8E8; }
+ul > li > * { color: #3E4349; }
+pre, tt, .monospaced { font-family: Consolas,Menlo,'Deja Vu Sans Mono','Bitstream Vera Sans Mono',monospace; }
+tt, .monospaced { font-size: 0.9em; color: black;
+}
+div.exampleblock > div.content, div.sidebarblock > div.content, div.listingblock > div.content { border-width: 0 0 0 3px; border-color: #E8E8E8; }
+div.verseblock { border-left-width: 0; margin-left: 3em; }
+div.quoteblock { border-left-width: 3px; margin-left: 0; margin-right: 0;}
+div.admonitionblock td.content { border-left: 3px solid #E8E8E8; }
+
+
+@media screen {
+  body {
+    max-width: 50em; /* approximately 80 characters wide */
+    margin-left: 16em;
+  }
+
+  #toc {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 13em;
+    padding: 0.5em;
+    padding-bottom: 1.5em;
+    margin: 0;
+    overflow: auto;
+    border-right: 3px solid #f8f8f8;
+    background-color: white;
+  }
+
+  #toc .toclevel1 {
+    margin-top: 0.5em;
+  }
+
+  #toc .toclevel2 {
+    margin-top: 0.25em;
+    display: list-item;
+    color: #aaaaaa;
+  }
+
+  #toctitle {
+    margin-top: 0.5em;
+  }
+}
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>RDO Openstack Packaging</h1>
+<span id="author">Author: Jakub Ružička &lt;jruzicka at redhat dot com&gt;</span><br>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>This document attempts to be the definitive source of information about
+<a href="https://openstack.redhat.com"><strong>RDO</strong></a> OpenStack packaging for developers and packagers.</p></div>
+<div class="paragraph"><p>It&#8217;s written in <span class="monospaced">asciidoc</span> and you can edit it using your favorite text
+editor:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> git clone https<span style="color: #990000">:</span>//github<span style="color: #990000">.</span>com/redhat-openstack/openstack-packaging-doc<span style="color: #990000">.</span>git
+<span style="font-style: italic"><span style="color: #9A1900"># Edit doc/rdo-packaging.txt</span></span>
+<span style="font-style: italic"><span style="color: #9A1900"># `make` to build HTML, `autobuild.sh` to autobuild on file changes</span></span>
+<span style="color: #009900">$&gt;</span> git commit -a
+<span style="font-style: italic"><span style="color: #9A1900"># Send Pull Request on GitHub!</span></span></tt></pre></div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/important.png" alt="Important">
+</td>
+<td class="content">This is unfinished <strong>Work In Progress</strong></td>
+</tr></table>
+</div>
+<div class="sect2">
+<h3 id="_rdo_a_community_distribution_of_openstack">RDO - a community distribution of OpenStack</h3>
+<div class="paragraph"><p><a href="https://openstack.redhat.com"><strong>RDO</strong></a> is a <a href="https://openstack.redhat.com">community</a> distribution of OpenStack which
+strives to provide the latest upstream code packaged for Red Hat
+Enterprise Linux, CentOS and Fedora.</p></div>
+<div class="paragraph"><p>Note that <a href="http://www.redhat.com"><strong>Red Hat</strong></a> also provides <a href="http://www.redhat.com/openstack">Red Hat Enterprise
+Linux OpenStack Platform</a> (<strong><a href="http://www.redhat.com/openstack">RHEL-OSP</a></strong>) which is based on <a href="https://openstack.redhat.com"><strong>RDO</strong></a>.</p></div>
+<div class="sect3">
+<h4 id="_relation_to_upstream">Relation to upstream</h4>
+<div class="paragraph"><p><a href="https://openstack.redhat.com"><strong>RDO</strong></a> is a distribution of upstream code, not a fork. We strive
+to keep <a href="https://openstack.redhat.com"><strong>RDO</strong></a> as close to upstream as possible with the minimum
+number of downstream patches.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_open_governance">Open Governance</h4>
+<div class="paragraph"><p>When Red Hat launched the RDO community in April 2013, we chose to
+focus our energies on making an OpenStack distribution available and
+encouraging a self-supporting community of users around the
+distribution, related tools, and supporting documentation. With this
+community now established, it is clear we need to prioritize opening
+up the RDO development process. Or, to put it another way, it is time
+to begin opening up the technical governance of RDO.</p></div>
+<div class="paragraph"><p>This process will be discussed and fleshed out in more detail on
+<a href="https://www.redhat.com/mailman/listinfo/rdo-list">rdo-list@redhat.com</a>.</p></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_packaging_workflow">Packaging workflow</h3>
+<div class="paragraph"><p>Currently all <a href="https://openstack.redhat.com"><strong>RDO</strong></a> packaging resources are maintained in the Fedora
+<a href="#dist-git">dist-git</a> repositories. This includes support for all
+Fedora distros of course, but currently also caters for EL6 and EL7
+distros and derivatives. In future the EL resources may be separated
+out under the CentOS OpenStack SIG umbrella, but for now Fedora is the
+primary <span class="monospaced">git</span> source.</p></div>
+<div class="paragraph"><p>Currently there is a 1:1 mapping between Fedora and OpenStack releases.
+I.E. the OpenStack package versions that are provided through the
+official Fedora repositories are:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+f22 / rawhide / master = Juno
+</p>
+</li>
+<li>
+<p>
+f21 = Icehouse
+</p>
+</li>
+<li>
+<p>
+f20 = Havana
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p><a href="https://openstack.redhat.com">RDO</a> also provides one release ahead for Fedora. There are
+separate <a href="http://rdo.fedorapeople.org">RDO repositories</a> that provide more recent
+OpenStack packages on the current stable version of Fedora.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="https://repos.fedorapeople.org/repos/openstack/openstack-juno/fedora-21/">Juno for f21</a>
+</p>
+</li>
+<li>
+<p>
+<a href="https://repos.fedorapeople.org/repos/openstack/openstack-icehouse/fedora-20/">Icehouse for f20</a>
+</p>
+</li>
+<li>
+<p>
+<a href="https://repos.fedorapeople.org/repos/openstack/openstack-havana/fedora-19/">Havana for f19</a>
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>The EL6 and EL7 packages are only provided through the <a href="https://openstack.redhat.com"><strong>RDO</strong></a>
+repositories.</p></div>
+<div class="paragraph"><p>Historically, there were separate <span class="monospaced">el6-icehouse</span>, <span class="monospaced">el6-havana</span>, etc.
+branches in Fedora <a href="#dist-git">dist-git</a> but Fedora and EL converged
+over time thanks to the release of EL7 and also due to the extra
+flexibility that the separate RDO repos provide by allowing to carry
+updated packages that may not be compatible with all of EPEL,
+leveraging the fact that EL deployers almost universally dedicate
+systems to OpenStack services. So going forward builds for all
+platforms should work from the same <span class="monospaced">.spec</span> file. I.E. we only use the
+Fedora branches corresponding to each OpenStack release (<span class="monospaced">master</span>,
+<span class="monospaced">f21</span>, <span class="monospaced">f20</span>, &#8230;) and EL6 and EL7 builds are done from those branches
+in <a href="https://copr.fedoraproject.org/coprs/jruzicka/">copr</a>, as detailed
+below in <a href="#rdo-pkg-guide">RDO Packaging Guide</a>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="dist-git">dist-git - where the .spec file lives</h3>
+<div class="paragraph"><p><strong>dist-git</strong> is a git repository which contains <span class="monospaced">.spec</span> file used for building
+a RPM package. It also contains other files needed for building source RPM
+such as patches to apply, init scripts etc.</p></div>
+<div class="paragraph"><p>RDO packages currently use
+<a href="http://pkgs.fedoraproject.org/cgit/openstack-nova.git/">Fedora dist-git</a> and
+<span class="monospaced">fedpkg</span> is used to obtain it, for example:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> fedpkg clone openstack-nova
+<span style="color: #009900">$&gt;</span> cd openstack-nova
+<span style="color: #009900">$&gt;</span> git remote -v
+origin    ssh<span style="color: #990000">:</span>//jruzicka@pkgs<span style="color: #990000">.</span>fedoraproject<span style="color: #990000">.</span>org/openstack-nova <span style="color: #990000">(</span>fetch<span style="color: #990000">)</span>
+origin    ssh<span style="color: #990000">:</span>//jruzicka@pkgs<span style="color: #990000">.</span>fedoraproject<span style="color: #990000">.</span>org/openstack-nova <span style="color: #990000">(</span>push<span style="color: #990000">)</span></tt></pre></div></div>
+<div class="paragraph"><p>You can inspect the package history using <span class="monospaced">git</span>:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> git log --oneline
+e70e895 Update to upstream <span style="color: #993399">2014.2</span><span style="color: #990000">.</span>b2
+6d4b2ae Updated patches from master-patches
+4113b4f maint<span style="color: #990000">:</span> modernize the systemd build deps
+9bec9a7 Update to latest stable/icehouse <span style="color: #993399">2014.1</span><span style="color: #990000">.</span><span style="color: #993399">1</span>
+5963f2d - Rebuilt <span style="font-weight: bold"><span style="color: #0000FF">for</span></span> https<span style="color: #990000">:</span>//fedoraproject<span style="color: #990000">.</span>org/wiki/Fedora_21_Mass_Rebuild
+d398372 Increase release number
+e203465 Remove qpid settings from dist conf</tt></pre></div></div>
+</div>
+<div class="sect2">
+<h3 id="patches-branch">Patches branch</h3>
+<div class="paragraph"><p>Because we rebase and backport often, manual management of patch files in
+<a href="#dist-git">dist-git</a> would be <em>unbearable</em>. That&#8217;s why each dist-git branch
+has an associated <strong>patches branch</strong> which contains upstream git tree with
+extra downstream patches on top. A dist-git can be updated by <span class="monospaced">rdopkg</span> to
+include patches from <strong>patches branch</strong> so maintaining RPM patches is a matter
+of <span class="monospaced">git</span> magic on patches branch - rebase on upstream tag, cherry-pick
+patches, etc.</p></div>
+<div class="paragraph"><p><a href="https://openstack.redhat.com"><strong>RDO</strong></a> patches branches live at
+<a href="https://github.com/redhat-openstack/">github.com/redhat-openstack</a> and follow few
+conventions:</p></div>
+<div class="paragraph"><p>Each patches branch:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+ends with <span class="monospaced">-patches</span> suffix by convention
+</p>
+</li>
+<li>
+<p>
+contains upstream project <span class="monospaced">git</span> tree up to a certain commit called
+  <em>patches base</em>, usually a version tag like <span class="monospaced">2014.2</span>
+</p>
+</li>
+<li>
+<p>
+has downstream patches rebased on top <em>patches base</em>
+</p>
+</li>
+</ul></div>
+<div class="sect3">
+<h4 id="_patches_branch_workflow">patches branch workflow</h4>
+<div class="literalblock">
+<div class="content monospaced">
+<pre>     +------------------------+
+     |        upstream        |
+     |  github.com/openstack  |
+     +------------------------+
+                 |
+      git rebase | git cherry-pick
+                 V
+  +-------------------------------+
+  |       patches branch          |
+  |  github.com/redhat-openstack  |
+  +-------------------------------+
+                 |
+                 | rdopkg update-patches
+                 V
+     +--------------------------+
+     |        dist-git          |
+     |  pkgs.fedoraproject.org  |
+     +--------------------------+</pre>
+</div></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="release-overview">Releases &amp; dists overview</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong>Juno</strong> (not yet released/public)
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+<em>Fedora 22</em>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+available from official Fedora repos
+</p>
+</li>
+<li>
+<p>
+built through <span class="monospaced">koji</span> (currently <span class="monospaced">master</span> branch)
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<span class="monospaced">fedora-21</span>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+RDO repo
+</p>
+</li>
+<li>
+<p>
+Fedora 22 (<span class="monospaced">master</span>) builds from <span class="monospaced">koji</span> reused
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<span class="monospaced">fedora-20</span>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+RDO repo
+</p>
+</li>
+<li>
+<p>
+symlink to <span class="monospaced">fedora-21</span>
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<span class="monospaced">epel-7</span>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+RDO repo
+</p>
+</li>
+<li>
+<p>
+built in <a href="https://copr.fedoraproject.org/coprs/jruzicka/rdo-juno-epel-7/">copr</a>
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<strong>Icehouse</strong> (latest release)
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+<em>Fedora 21</em>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+available from official Fedora 21 repos
+</p>
+</li>
+<li>
+<p>
+built through <span class="monospaced">koji</span> (<span class="monospaced">f21</span> branch)
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<span class="monospaced">fedora-20</span>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+RDO repo
+</p>
+</li>
+<li>
+<p>
+Fedora 21 builds from <span class="monospaced">koji</span> reused
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<span class="monospaced">epel-7</span>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+RDO repo
+</p>
+</li>
+<li>
+<p>
+built in <a href="https://copr.fedoraproject.org/coprs/jruzicka/rdo-icehouse-epel-7/">copr</a>
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<span class="monospaced">epel-6</span>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+RDO repo
+</p>
+</li>
+<li>
+<p>
+built in <a href="https://copr.fedoraproject.org/coprs/jruzicka/rdo-icehouse-epel-6/">copr</a>
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<strong>Havana</strong> (<a href="https://www.redhat.com/archives/rdo-list/2014-July/msg00072.html">EOL</a> mid September)
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+<em>Fedora 20</em>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+available from official Fedora 20 repos
+</p>
+</li>
+<li>
+<p>
+built through <span class="monospaced">koji</span> (<span class="monospaced">f20</span> branch)
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<span class="monospaced">fedora-19</span>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+RDO repo
+</p>
+</li>
+<li>
+<p>
+Fedora 20 builds from <span class="monospaced">koji</span> reused
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+<span class="monospaced">epel-6</span>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+RDO repo
+</p>
+</li>
+<li>
+<p>
+built in <span class="monospaced">koji</span> from <span class="monospaced">el6-havana</span> branch with <span class="monospaced">--dist el6</span>
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="rdopkg">rdopkg</h3>
+<div class="paragraph"><p><span class="monospaced">rdopkg</span> is a command line tool that automates many operations on RDO packages
+including:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+rebases to new version
+</p>
+</li>
+<li>
+<p>
+introducing patches
+</p>
+</li>
+<li>
+<p>
+modifying .spec file: bumping versions, managing patches, writing
+   changelog, producing meaningful commit messages, &#8230;
+</p>
+</li>
+<li>
+<p>
+build package in copr build system
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>On top of that, <span class="monospaced">rdopkg</span> also serves as <a href="https://openstack.redhat.com"><strong>RDO</strong></a> update/CI frontend.</p></div>
+<div class="paragraph"><p>Use of <span class="monospaced">rdopkg</span> is not strictly required, but using it avoids a number
+of repetitive and error prone processes involving several underlying tools.</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="master-pkg-guide">Master Packaging Guide</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>In order to build an RPM with the master packaging you&#8217;ll need to install
+delorean, following the steps below.</p></div>
+<div class="sect2">
+<h3 id="_install_dependencies">Install dependencies</h3>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>git clone https<span style="color: #990000">:</span>//github<span style="color: #990000">.</span>com/openstack-packages/delorean<span style="color: #990000">.</span>git
+cd delorean
+git clone https<span style="color: #990000">:</span>//github<span style="color: #990000">.</span>com/redhat-openstack/rdoinfo<span style="color: #990000">.</span>git
+yum install docker-io git createrepo python-virtualenv git-hg
+virtualenv <span style="color: #990000">..</span>/delorean-venv
+<span style="color: #990000">.</span> <span style="color: #990000">..</span>/delorean-venv/bin/activate
+pip install -r requirements<span style="color: #990000">.</span>txt
+python setup<span style="color: #990000">.</span>py develop
+systemctl start docker</tt></pre></div></div>
+</div>
+<div class="sect2">
+<h3 id="_prepare_a_docker_builder_image">Prepare a docker "builder" image</h3>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #990000">.</span>/scripts/create_build_image<span style="color: #990000">.</span>sh</tt></pre></div></div>
+</div>
+<div class="sect2">
+<h3 id="_run_delorean">Run Delorean</h3>
+<div class="paragraph"><p>Run delorean for the package you are trying to build.</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">export</span></span> <span style="color: #009900">PYTHONPATH</span><span style="color: #990000">=</span><span style="color: #009900">$PYTHONPATH</span><span style="color: #990000">:</span>rdoinfo
+delorean --config-file projects<span style="color: #990000">.</span>ini --info-file rdoinfo/rdo<span style="color: #990000">.</span>yml --local --package-name openstack-horizon</tt></pre></div></div>
+<div class="paragraph"><p>This will clone the packaging for the project your interested in into
+data/openstack-horizon_spec, you can now change this packaging and rerun the
+delorean command in test your changes.</p></div>
+<div class="paragraph"><p>If you have locally changed the packaging make sure to include --dev in the
+command line. This switches delorean into "dev mode" which causes it to
+preserve local changes to your packaging between runs so you can iterate on
+spec changes. It will also cause the most current public master repository to
+be installed in your build image(as some of its contents will be needed for
+dependencies) so that the packager doesn&#8217;t have to build the entire set of
+packages.</p></div>
+<div class="paragraph"><p>The output from delorean is a repository containing the packages you just built
+along with the most recent successfully built version of each package. To find
+the most recent repository follow the symbolic link ./data/repos/current</p></div>
+</div>
+<div class="sect2">
+<h3 id="_submitting_changes_to_gerrit">Submitting changes to gerrit</h3>
+<div class="paragraph"><p>Once you are happy that you have your changes ready to be reviewed, create a
+git commit with an appropriate comment, add a git remote pointing to gerrit
+and then submit your patch</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>git commit -p
+git remote add gerrit ssh<span style="color: #990000">://&lt;</span>username<span style="color: #990000">&gt;</span>@review<span style="color: #990000">.</span>gerrithub<span style="color: #990000">.</span>io<span style="color: #990000">:</span><span style="color: #993399">29418</span>/openstack-packages<span style="color: #990000">/&lt;</span>package-name<span style="color: #990000">&gt;</span>
+git review f20-master</tt></pre></div></div>
+</div>
+<div class="sect2">
+<h3 id="_browsing_gerrit_for_reviews">Browsing gerrit for reviews</h3>
+<div class="paragraph"><p>To look at all open patches for the upstream packaging simply use the following link
+<a href="https://review.gerrithub.io/#/q/status:open+project:^openstack-packages/.*,n,z">https://review.gerrithub.io/#/q/status:open+project:^openstack-packages/.*,n,z</a></p></div>
+</div>
+<div class="sect2">
+<h3 id="_differences_between_master_and_rawhide_packaging">Differences between master and rawhide packaging</h3>
+<div class="paragraph"><p>There are a number of expected differences between the master packaging and
+the packaging in rawhide</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+The delorean packaging has had Version: and Release: tags are both set to XXX
+  in the delorean packaging as we take both of these from the tags set on the
+  git repositories
+</p>
+</li>
+<li>
+<p>
+Because we are packaging master, patches aren&#8217;t backported into the delorean
+  packaging
+</p>
+</li>
+<li>
+<p>
+  %setup macro, this is because the subdirectory contained in the source tarball
+  contains both the version and release, this is being passed into rpmbuild
+  and should not be used in the fedora packaging, in most cases it can just be
+</p>
+</li>
+<li>
+<p>
+The files "sources" and ".gitignore" have been truncated in the master packaging
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>To Assist in identifing difference the report being output by the production
+delorean includes a spec delta link showing a diff between the 2 repositories
+<a href="http://209.132.178.33/repos/report.html">http://209.132.178.33/repos/report.html</a></p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rdo-pkg-guide">RDO Packaging Guide</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>This guide attempts to describe entire process of packaging new version of
+an OpenStack package and getting it into <a href="https://openstack.redhat.com"><strong>RDO</strong></a>.</p></div>
+<div class="paragraph"><p><span class="monospaced">$PROJECT</span> variable is used throughout the guide. Substitute it with your
+OpenStack project such as <span class="monospaced">nova</span>, <span class="monospaced">neutron</span>, <span class="monospaced">heat</span> etc.</p></div>
+<div class="paragraph"><p>Note that some projects such as client libraries follow slightly different
+naming conventions.</p></div>
+<div class="paragraph"><p>Also Note that any packaging updates going into RDO should first be submitted
+to the master packaging (described above) then cherry picked into rawhide.</p></div>
+<div class="sect2">
+<h3 id="prereqs">Prerequisites</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+You need to have
+  <strong>Fedora account</strong> <span class="footnote"><br>[also known as FAS account - <a href="https://admin.fedoraproject.org/accounts/">Fedora Account System</a>]<br></span>
+  and be <strong>Fedora packager</strong> in order to interact with Fedora
+  build system (<a href="https://koji.fedoraproject.org/koji/">koji</a>)
+  and update system (<a href="https://admin.fedoraproject.org/updates">bodhi</a>).<br>
+  <a href="https://fedoraproject.org/wiki/Join_the_package_collection_maintainers">Join the package collection maintainers</a>
+  if you haven&#8217;t yet!
+</p>
+</li>
+<li>
+<p>
+TBD Gerrit account for submitting RDO updates
+</p>
+</li>
+</ul></div>
+<div class="sect3">
+<h4 id="_permissions_you_8217_ll_need">Permissions You&#8217;ll Need</h4>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong>Fedora <a href="#dist-git">dist-git</a></strong>: visit
+  <a href="https://admin.fedoraproject.org/pkgdb/package/openstack-nova/">pkgdb</a> for
+  your package, <span class="monospaced">+ Request Commit Access</span> and optionally poke Main Contact or
+  Package Administrator of your choice.
+</p>
+</li>
+<li>
+<p>
+<strong><a href="#patches-branch">patches branches</a> @ <span class="monospaced">github.com/redhat-openstack</span></strong>: request
+  permissions for <a href="https://github.com/redhat-openstack/nova">your project</a> from a
+  <a href="https://github.com/orgs/redhat-openstack/teams/owners">redhat-openstack
+  admin</a>. Note that you&#8217;re looking for <span class="monospaced">/$PROJECT</span>, not
+  <span class="monospaced">/openstack-$PROJECT</span>. You can tell you&#8217;re in the right repo when
+  there are branches with <span class="monospaced">-patches</span> suffix.
+</p>
+</li>
+<li>
+<p>
+<strong>copr build system</strong>: Request build permissions in relevant
+  <a href="https://copr.fedoraproject.org/coprs/jruzicka">jruzicka&#8217;s coprs</a> listed
+  below. Check the <span class="monospaced">Is Builder</span> box and hit <span class="monospaced">Update</span> for each copr. Poke
+  <span class="monospaced">jruzicka</span> to accelerate the approval.
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Juno copr:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="https://copr.fedoraproject.org/coprs/jruzicka/rdo-juno-epel-7/permissions/">rdo-juno-epel-7</a>
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Icehouse coprs:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="https://copr.fedoraproject.org/coprs/jruzicka/rdo-icehouse-epel-6/permissions/">rdo-icehouse-epel-6</a>
+</p>
+</li>
+<li>
+<p>
+<a href="https://copr.fedoraproject.org/coprs/jruzicka/rdo-icehouse-epel-7/permissions/">rdo-icehouse-epel-7</a>
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="_software">Software</h4>
+<div class="sect4">
+<h5 id="_fedora_packaging_tools">Fedora packaging tools</h5>
+<div class="paragraph"><p><span class="monospaced">fedora-packager</span> package available in standard Fedora repositories pulls in
+tools for packaging and interacting with Fedora infrastructure including
+<span class="monospaced">fedpkg</span> and <a href="https://koji.fedoraproject.org/koji/">koji</a>,
+<a href="https://admin.fedoraproject.org/updates">bodhi</a>, and
+<a href="https://admin.fedoraproject.org/pkgdb/">pkgdb</a> clients.</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> yum install fedora-packager</tt></pre></div></div>
+<div class="paragraph"><p>You need to setup your FAS certificate to communicate with Fedora systems:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> fedora-packager-install</tt></pre></div></div>
+</div>
+<div class="sect4">
+<h5 id="_span_class_monospaced_rdopkg_span"><span class="monospaced">rdopkg</span></h5>
+<div class="paragraph"><p>First, get yum repository for your distribution:</p></div>
+<div class="paragraph"><p>Fedora:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> curl -o /etc/yum<span style="color: #990000">.</span>repos<span style="color: #990000">.</span>d/rdopkg<span style="color: #990000">.</span>repo http<span style="color: #990000">:</span>//FIXME<span style="color: #990000">.</span>rdoproject<span style="color: #990000">.</span>org/rdopkg-fedora<span style="color: #990000">.</span>repo</tt></pre></div></div>
+<div class="paragraph"><p>RHEL &gt;= 7:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> curl -o /etc/yum<span style="color: #990000">.</span>repos<span style="color: #990000">.</span>d/rdopkg<span style="color: #990000">.</span>repo http<span style="color: #990000">:</span>//FIXME<span style="color: #990000">.</span>rdoproject<span style="color: #990000">.</span>org/rdopkg-rhel<span style="color: #990000">.</span>repo</tt></pre></div></div>
+<div class="paragraph"><p>and then</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> yum install rdopkg</tt></pre></div></div>
+</div>
+<div class="sect4">
+<h5 id="_span_class_monospaced_rdopkg_coprbuild_span"><span class="monospaced">rdopkg coprbuild</span></h5>
+<div class="paragraph"><p>In order to use <span class="monospaced">rdopkg coprbuild</span> action to easily build packages in
+<a href="https://copr.fedoraproject.org/coprs/jruzicka">jruzicka&#8217;s coprs</a>, you need to
+save your copr API token into <span class="monospaced">~/.config/copr</span> as described in
+<a href="http://copr.fedoraproject.org/api">http://copr.fedoraproject.org/api</a>.</p></div>
+<div class="paragraph"><p>Although <span class="monospaced">rdopkg</span> shares this config with <span class="monospaced">copr-cli</span> (you can use <span class="monospaced">copr-cli</span>
+to validate it), <span class="monospaced">rdopkg</span> has it&#8217;s own copr client implementation
+<span class="footnote"><br>[<span class="monospaced">copr-cli</span> was not reusable at the time of writing]<br></span> and doesn&#8217;t
+require <span class="monospaced">copr-cli</span> to
+work.</p></div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_initial_repository_setup">Initial repository setup</h3>
+<div class="paragraph"><p>With all the <a href="#prereqs">prerequisites</a> met, it&#8217;s time to clone the package
+<a href="#dist-git">dist-git</a> using <span class="monospaced">fedpkg</span>.</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> fedpkg clone openstack-<span style="color: #009900">$PROJECT</span>
+<span style="color: #009900">$&gt;</span> cd openstack-<span style="color: #009900">$PROJECT</span></tt></pre></div></div>
+<div class="paragraph"><p>You also need to be able to access to your project&#8217;s <a href="#patches-branch">patches branches</a>.<br>
+<span class="monospaced">rdopkg</span> expects the <span class="monospaced">git</span> remote containing <a href="#patches-branch">patches branches</a> to be named <span class="monospaced">redhat-openstack</span>:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>git remote add -f redhat-openstack git@github<span style="color: #990000">.</span>com<span style="color: #990000">:</span>redhat-openstack<span style="color: #990000">/</span><span style="color: #009900">$PROJECT</span><span style="color: #990000">.</span>git</tt></pre></div></div>
+<div class="paragraph"><p>Finally, you need a remote with upstream source in order to cherry-pick
+upstream patches and rebase <a href="#patches-branch">patches branch</a> on new
+version:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> git remote add -f openstack git<span style="color: #990000">:</span>//github<span style="color: #990000">.</span>com/openstack<span style="color: #990000">/</span><span style="color: #009900">$PROJECT</span><span style="color: #990000">.</span>git</tt></pre></div></div>
+</div>
+<div class="sect2">
+<h3 id="_modifying_the_package">Modifying the package</h3>
+<div class="paragraph"><p>The package metadata is stored in <span class="monospaced">.spec</span> file which is found in top
+directory of <a href="#dist-git">dist-git</a>, usually <span class="monospaced">openstack-$PROJECT.spec</span>. Every
+change to a package requires at least a change in <span class="monospaced">.spec</span> file and possibly
+other <a href="#dist-git">dist-git</a> files (add/remove patches, init scripts, &#8230;).</p></div>
+<div class="paragraph"><p>Every time you do a new build, you need to:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Bump <span class="monospaced">Release</span> (when source tarball stays the same) or change <span class="monospaced">Version</span>  and
+  reset <span class="monospaced">Release</span> (on update to new upstream version/tarball) in <span class="monospaced">.spec</span> file.
+</p>
+</li>
+<li>
+<p>
+Provide useful <span class="monospaced">%changelog</span> entry at the end of <span class="monospaced">.spec</span> file describing your
+  change.
+</p>
+</li>
+<li>
+<p>
+Commit the <a href="#dist-git">dist-git</a> changes with meaningful commit message.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Following sections provide examples for most common packaging scenarios.</p></div>
+<div class="sect3">
+<h4 id="_simple_span_class_monospaced_spec_span_fix">Simple <span class="monospaced">.spec</span> fix</h4>
+<div class="paragraph"><p>The simplest kind of change that doesn&#8217;t introduce/remove patches or
+different source tarball.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Make required changes.
+</p>
+</li>
+<li>
+<p>
+Bump <span class="monospaced">Release</span>.
+</p>
+</li>
+<li>
+<p>
+Provide useful <span class="monospaced">%changelog</span> entry describing your change.
+</p>
+</li>
+<li>
+<p>
+Commit the <a href="#dist-git">dist-git</a> changes with meaningful commit message.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Although this change is simple, <span class="monospaced">rdopkg fix</span> can still make some string
+manipulation for you. In following example, I add a new dependency to <span class="monospaced">nova</span>
+package:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> cd openstack-nova
+<span style="color: #009900">$&gt;</span> rdopkg fix</tt></pre></div></div>
+<div class="paragraph"><p>Action required: Edit .spec file as needed and describe changes in
+changelog. Once done, run <span class="monospaced">rdopkg -c</span> to continue:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> vim openstack-nova<span style="color: #990000">.</span>spec
+<span style="font-style: italic"><span style="color: #9A1900"># Add Requires line and describe the change in %changelog</span></span>
+<span style="color: #009900">$&gt;</span> rdopkg -c</tt></pre></div></div>
+<div class="paragraph"><p>After this, <span class="monospaced">rdopkg</span> generates new commit from the %changelog entry you
+provided and displays the diff:</p></div>
+<div class="literalblock">
+<div class="content monospaced">
+<pre> Name:             openstack-nova
+ Version:          2014.2
+-Release:          0.1.b2%{?dist}
++Release:          0.2.b2%{?dist}
+ Summary:          OpenStack Compute (nova)</pre>
+</div></div>
+<div class="literalblock">
+<div class="content monospaced">
+<pre>...</pre>
+</div></div>
+<div class="literalblock">
+<div class="content monospaced">
+<pre>+Requires:         banana
+ Requires:         python-nova = %{version}-%{release}</pre>
+</div></div>
+<div class="literalblock">
+<div class="content monospaced">
+<pre>...</pre>
+</div></div>
+<div class="literalblock">
+<div class="content monospaced">
+<pre> %changelog
++* Tue Aug 12 2014 Jakub Ruzicka &lt;jruzicka@redhat.com&gt; 2014.2-0.2.b2
++- Require banana package for the lulz
++
+ * Sun Aug 03 2014  Vladan Popovic &lt;vpopovic@redhat.com&gt; 2014.2-0.1.b2
+ - Update to upstream 2014.2.b2
+ - openstack-nova-compute should depend on libvirt-daemon-kvm, not libvirt - rhbz#996715</pre>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_introducing_removing_patches">Introducing/removing patches</h4>
+<div class="paragraph"><p>When new patches are introduced to <a href="#patches-branch">patches branch</a> (usually
+by <span class="monospaced">git review</span>), <a href="#dist-git">dist-git</a> must be updated with new patches files
+and <span class="monospaced">.spec</span> file patch definitions.</p></div>
+<div class="paragraph"><p><span class="monospaced">rdopkg</span> provides:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<span class="monospaced">rdopkg update-patches</span>: low-level action that only updates <span class="monospaced">.spec</span> file
+  from local <a href="#patches-branch">patches branch</a>
+</p>
+</li>
+<li>
+<p>
+<span class="monospaced">rdopkg patch</span>: high-level action on top of <span class="monospaced">update-patches</span> with extra
+  features (reset local patches branch from remote, bump release, generate
+  changelog entry)
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>See
+<a href="http://FIXME.rdoproject.org/rdopkg/rdopkg-adv-patch.7.html">man
+rdopkg-adv-patch</a> for an example of using <span class="monospaced">rdopkg patch</span>.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note">
+</td>
+<td class="content">TODO</td>
+</tr></table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_rebasing_to_new_version">Rebasing to new version</h4>
+<div class="paragraph"><p>See
+<a href="http://FIXME.rdoproject.org/rdopkg/rdopkg-adv-new-version.7.html">man
+rdopkg-adv-new-version</a> for an example of using <span class="monospaced">rdopkg new-version</span> to update
+a package to a new upstream version.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note">
+</td>
+<td class="content">TODO</td>
+</tr></table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_building_the_package">Building the package</h3>
+<div class="paragraph"><p>After you have modified <a href="#dist-git">dist-git</a> to your liking, it&#8217;s time to build.
+You need to be on the dist-git branch of respective Fedora release such as
+<span class="monospaced">master</span> or <span class="monospaced">f21</span>, see <a href="#release-overview">[release-overview]</a>.</p></div>
+<div class="sect3">
+<h4 id="_local_build_with_mock">local build with mock</h4>
+<div class="paragraph"><p>You can build the Fedora package locally using <span class="monospaced">mock</span> to ensure it builds
+and/or test it:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> fedpkg mockbuild</tt></pre></div></div>
+<div class="paragraph"><p>Find the results in <span class="monospaced">./results_$PACKAGE/$VERSION/$RELEASE</span> directory. The
+most interesting file is <span class="monospaced">build.log</span>.</p></div>
+<div class="paragraph"><p>You can also test EL builds using <span class="monospaced">mock</span>, but you may be missing certain build
+requirements only available at <a href="https://openstack.redhat.com"><strong>RDO</strong></a>
+<a href="https://copr.fedoraproject.org/coprs/jruzicka/">coprs</a>:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> fedpkg --dist el7 mockbuild --root epel-<span style="color: #993399">7</span>-x86_64</tt></pre></div></div>
+</div>
+<div class="sect3">
+<h4 id="_copr_build_of_el_package">copr build of EL package</h4>
+<div class="paragraph"><p>Beginning with the Icehouse release, EL packages are built in
+<a href="https://copr.fedoraproject.org/coprs/jruzicka/rdo-juno-epel-7/">copr</a> build
+system due to constraints of Fedora <a href="#dist-git">dist-git</a>.</p></div>
+<div class="paragraph"><p>Because a push to Fedora dist-git is irreversible, building in <span class="monospaced">copr</span> first is
+recommended. You may find some EL specific problems and solve them without the need
+of new package release.</p></div>
+<div class="paragraph"><p>The following command creates a source RPM for selected distro using
+<span class="monospaced">fedpkg srpm</span>, uploads it to your <span class="monospaced">fedorapeople.org</span> space and submits it to
+be built in <span class="monospaced">copr</span>:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> rdopkg coprbuild -d epel-<span style="color: #993399">7</span> -f up<span style="color: #990000">.</span>yml</tt></pre></div></div>
+<div class="paragraph"><p>Also, <span class="monospaced">-f up.yml</span> instructs <span class="monospaced">rdopkg</span> to dump the build information
+into <span class="monospaced">up.yml</span> file that can be used later to submit an <a href="https://openstack.redhat.com"><strong>RDO</strong></a>
+update using <span class="monospaced">rdopkg update -f up.yml</span>.</p></div>
+<div class="paragraph"><p>See a full example of using <span class="monospaced">rdopkg coprbuild</span> in
+<a href="http://FIXME.rdoproject.org/rdopkg/rdopkg-adv-coprbuild.7.html">man rdopkg-adv-coprbuild</a>.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_koji_build_of_fedora_package">koji build of Fedora package</h4>
+<div class="paragraph"><p>Push your Fedora <a href="#dist-git">dist-git</a> changes and build using <span class="monospaced">fedpkg</span>:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> git push
+<span style="color: #009900">$&gt;</span> fedpkg build</tt></pre></div></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_submitting_an_update">Submitting an update</h3>
+<div class="paragraph"><p>After your builds finished, you need to submit the package(s) for
+update in <a href="https://openstack.redhat.com"><strong>RDO</strong></a> using:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> rdopkg update</tt></pre></div></div>
+<div class="paragraph"><p>By default, <span class="monospaced">rdopkg update</span> tries to autodetect which package you&#8217;re trying to
+update and opens an YAML update file template in text editor. You need to
+specify all builds that should be updated at once in the update file.</p></div>
+<div class="paragraph"><p>See <strong>ACTION: update</strong> in</p></div>
+<div class="paragraph"><p><a href="http://FIXME.rdoproject.org/rdopkg/rdopkg.1.html#ACTIONS">man rdopkg</a>
+and also
+<a href="http://FIXME.rdoproject.org/rdopkg/rdopkg-adv-coprbuild.7.html">man rdopkg-adv-coprbuild</a>
+for an example of how to do <span class="monospaced">copr</span> and <span class="monospaced">koji</span> builds and prepare and submit the
+update file non-interactively.</p></div>
+<div class="paragraph"><p><span class="monospaced">rdopkg update</span> submits the update through <span class="monospaced">git review</span> and prints the URL to
+gerrit. The update needs to pass CI in order to be merged and later pushed to
+<a href="https://openstack.redhat.com"><strong>RDO</strong></a> repositories.</p></div>
+<div class="paragraph"><p>To track your update, use:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> rdopkg list-updates -r</tt></pre></div></div>
+<div class="sect3">
+<h4 id="_fedora_update">Fedora update</h4>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">$&gt;</span> fedpkg update</tt></pre></div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note">
+</td>
+<td class="content">TODO</td>
+</tr></table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2014-12-09 21:58:02 CET
+</div>
+</div>
+</body>
+</html>
